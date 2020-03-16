@@ -6,8 +6,12 @@ const MainContainer = props => {
     displayChild: 0,
     clippedElements: [],
     clippedIncomingElements: [],
-    animation: false,
-    finishedClippig: false
+    finishedClippig: false,
+    ref: React.createRef()
+  });
+
+  const [showAnimation, setShowAnimation] = useState({
+    animation: false
   });
 
   const handleChangeSlide = event => {
@@ -26,7 +30,10 @@ const MainContainer = props => {
           : clipNslide.displayChild - 1;
     }
 
-    const {clippedElements, clippedIncomingElements} = clipAnimationElements();
+    const {
+      clippedElements,
+      clippedIncomingElements
+    } = clipAnimationElements();
 
     setClipNslide({
       ...clipNslide,
@@ -35,6 +42,10 @@ const MainContainer = props => {
       clippedIncomingElements,
       animation: true,
       finishedClippig: true
+    });
+
+    setShowAnimation({
+      animation: true
     });
   };
 
@@ -45,15 +56,21 @@ const MainContainer = props => {
     const divideBy = props.divideBy ? props.divideBy : 3;
     const clippedElements = [],
       clippedIncomingElements = [];
+    const oddOrEvenTransition = Math.floor(Math.random() * 2) + 1;
+    console.log("ODD OR EVEN", oddOrEvenTransition);
 
     for (let i = 1; i <= divideBy; i++) {
+      const transitionTimer =
+        i % oddOrEvenTransition === 0
+          ? Math.random() * 0.3 + 1.25
+          : Math.random() * 0.3 + 1.0;
+
       const stylesObj = {
         clipPath: `polygon(0 ${((i - 1) * 100) / divideBy}%, 0% ${(i * 100) /
           divideBy}%, 100% ${(i * 100) / divideBy}%, 100% ${((i - 1) * 100) /
           divideBy}%)`,
         zIndex: `${5 + i}`,
-        transition: `left ${i % 2 == 0 ? Math.random() * 0.4 + 1.3 : Math.random() * 0.3 + 1}s ease-in`,
-        transitionDelay: `${i === 1 ? 0 : Math.random() * 0.5}s`
+        transitionDelay: `${i === 1 ? 0 : Math.random() * 0.4 + 0.4}s`
       };
 
       clippedElements.push(
@@ -61,7 +78,8 @@ const MainContainer = props => {
           key={i}
           style={{
             ...stylesObj,
-            left: "0%"
+            left: "0%",
+            transition: `left ${transitionTimer}s ease-in`
           }}
           className="clipped-element"
         >
@@ -69,21 +87,24 @@ const MainContainer = props => {
         </div>
       );
 
+      let nextChild = (clipNslide.displayChild + 1) % props.children.length;
+
       clippedIncomingElements.push(
         <div
           key={i}
           style={{
             ...stylesObj,
-            left: "160%"
+            left: "300%",
+            transition: `left ${transitionTimer}s ease-out`
           }}
           className="clipped-element"
         >
-          {props.children[clipNslide.displayChild+1]}
+          {props.children[nextChild]}
         </div>
       );
     }
 
-    return {clippedElements, clippedIncomingElements};
+    return { clippedElements, clippedIncomingElements };
   };
 
   const runAnimation = () => {
@@ -96,7 +117,7 @@ const MainContainer = props => {
           key={element.key}
           style={{
             ...element.props.style,
-            left: "-160%"
+            left: "-300%"
           }}
         />
       );
@@ -123,11 +144,30 @@ const MainContainer = props => {
     });
   };
 
+  const addEventListener = () => {
+    let listenedAmountOfTimes = 0;
+
+    clipNslide.ref.current.addEventListener("transitionend", () => {
+      listenedAmountOfTimes++;
+      let divideBy = (props.divideBy ? props.divideBy : 3) * 2;
+      if (listenedAmountOfTimes % divideBy === 0) {
+        setShowAnimation({
+          ...showAnimation,
+          animation: false
+        });
+      }
+    });
+  };
+
   useEffect(() => {
     if (clipNslide.finishedClippig) {
       runAnimation();
     }
   });
+
+  useEffect(() => {
+    addEventListener();
+  }, []);
 
   //Sets the background to either a color or a url depending on what is given by the user
   const backgroundStyle = /(url\()|(\/)/g.test(props.background)
@@ -137,13 +177,16 @@ const MainContainer = props => {
   return (
     <div
       id="ClipNSlide-Main-Container"
-      style={backgroundStyle}
-      onClick={event => (clipNslide.animation ? "" : handleChangeSlide(event))}
+      style={{ ...backgroundStyle, position: "relative", overflow: "hidden" }}
+      ref={clipNslide.ref}
+      onClick={event =>
+        showAnimation.animation ? "" : handleChangeSlide(event)
+      }
     >
-      {clipNslide.animation
+      {showAnimation.animation
         ? clipNslide.clippedElements
         : props.children[clipNslide.displayChild]}
-      {clipNslide.animation ? clipNslide.clippedIncomingElements : ""}
+      {showAnimation.animation ? clipNslide.clippedIncomingElements : ""}
     </div>
   );
 };
