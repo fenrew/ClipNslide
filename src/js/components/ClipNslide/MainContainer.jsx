@@ -23,12 +23,12 @@ const MainContainer = props => {
     let newDisplayChild = (clipNslide.displayChild + 1) % props.children.length;
 
     // 0.3 is 30% of the screen to go to previous child in the slider
-    if (event.clientX < windowWidth * 0.3) {
-      newDisplayChild =
-        clipNslide.displayChild - 1 < 0
-          ? props.children.length - 1
-          : clipNslide.displayChild - 1;
-    }
+    // if (event.clientX < windowWidth * 0.3) {
+    //   newDisplayChild =
+    //     clipNslide.displayChild - 1 < 0
+    //       ? props.children.length - 1
+    //       : clipNslide.displayChild - 1;
+    // }
 
     const { clippedElements, clippedIncomingElements } = props.randomClipper
       ? clipAnimationElementsRandom()
@@ -113,9 +113,9 @@ const MainContainer = props => {
 
     for (let i = 1; i <= divideBy; i++) {
       const stylesObj = {
-        clipPath: `polygon(0 ${((i - 1) * 100) / divideBy}%, 0% ${(i * 100) /
-          divideBy}%, 100% ${(i * 100) / divideBy}%, 100% ${((i - 1) * 100) /
-          divideBy}%)`,
+        clipPath: `polygon(0 ${(((i - 1) * 100) / divideBy)}%, 0% ${((i * 100) /
+          divideBy)+0.2}%, 100% ${((i * 100) / divideBy)+0.2}%, 100% ${(((i - 1) * 100) /
+          divideBy)}%)`,
         zIndex: `${5 + i}`
       };
 

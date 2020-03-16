@@ -3,45 +3,74 @@ import React from "react";
 import MainContainer from "../ClipNslide/MainContainer";
 import Content from "../ClipNslide/Content/Content";
 
+import "./mainPageStyles.css";
+
 const MainPage = () => {
   return (
-    <div style={{height: "100vh", width: "100%"}}>
-      <MainContainer background="black">
+    <div style={{ height: "100vh", width: "100vw" }}>
+      <MainContainer background="black" divideBy="5">
         <Content>
-          <div
-            style={{
-              backgroundImage:
-                "url(https://www.bigstockphoto.com/images/homepage/module-6.jpg)",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "100% 100%",
-              height: "100vh",
-              width: "100%"
-            }}
-          ></div>
+          <div className="slider-container" id="slider-one">
+            <h1 className="slider-header">Markus Heldrup</h1>
+            <div className="slider-quote">
+              - Developer by day, sleeper by night!
+            </div>
+            <div className="slider-content">
+              This homepage is my protofolio created in March 2020. As you can
+              imagine my developer skills along with bitcoins have increase
+              drastically since then! *hopefully*
+            </div>
+            <div className="slider-content">
+              The website is focused towards javascript skills and effects, thus
+              it may come at the cost of design. As we all know, a porofolio
+              webpage is only about displaying skills in the awesome art of
+              programming as we all love and have come acusomed to. At this
+              point I am just rambeling, so without further a due, enjoy my
+              nifty little website!
+            </div>
+          </div>
         </Content>
         <Content>
-          <div
-            style={{
-              backgroundImage:
-                "url(https://www.w3schools.com/w3css/img_lights.jpg)",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "100% 100%",
-              height: "100vh",
-              width: "100%"
-            }}
-          ></div>
+          <div className="slider-container" id="slider-two">
+            <h1 className="slider-header">Markus Heldrup</h1>
+            <div className="slider-quote">
+              - Developer by day, sleeper by night!
+            </div>
+            <div className="slider-content">
+              This homepage is my protofolio created in March 2020. As you can
+              imagine my developer skills along with bitcoins have increase
+              drastically since then! *hopefully*
+            </div>
+            <div className="slider-content">
+              The website is focused towards javascript skills and effects, thus
+              it may come at the cost of design. As we all know, a porofolio
+              webpage is only about displaying skills in the awesome art of
+              programming as we all love and have come acusomed to. At this
+              point I am just rambeling, so without further a due, enjoy my
+              nifty little website!
+            </div>
+          </div>
         </Content>
         <Content>
-          <div
-            style={{
-              backgroundImage:
-                "url(https://cdn.pixabay.com/photo/2015/04/23/22/00/tree-736885__340.jpg)",
-              backgroundRepeat: "no-repeat",
-              backgroundSize: "100% 100%",
-              height: "100vh",
-              width: "100%"
-            }}
-          ></div>
+          <div className="slider-container" id="slider-three">
+            <h1 className="slider-header">Markus Heldrup</h1>
+            <div className="slider-quote">
+              - Developer by day, sleeper by night!
+            </div>
+            <div className="slider-content">
+              This homepage is my protofolio created in March 2020. As you can
+              imagine my developer skills along with bitcoins have increase
+              drastically since then! *hopefully*
+            </div>
+            <div className="slider-content">
+              The website is focused towards javascript skills and effects, thus
+              it may come at the cost of design. As we all know, a porofolio
+              webpage is only about displaying skills in the awesome art of
+              programming as we all love and have come acusomed to. At this
+              point I am just rambeling, so without further a due, enjoy my
+              nifty little website!
+            </div>
+          </div>
         </Content>
       </MainContainer>
     </div>
