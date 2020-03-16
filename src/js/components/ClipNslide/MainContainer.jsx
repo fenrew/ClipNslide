@@ -1,11 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./mainContainerStyles.css";
 
 const MainContainer = props => {
   const [clipNslide, setClipNslide] = useState({
     displayChild: 0,
     clippedElements: [],
-    animation: false
+    animation: false,
+    finishedClippig: false,
   });
 
   const handleChangeSlide = event => {
@@ -30,7 +31,8 @@ const MainContainer = props => {
       ...clipNslide,
       displayChild: newDisplayChild,
       clippedElements,
-      animation: true
+      animation: true,
+      finishedClippig: true
     });
   };
 
@@ -48,10 +50,14 @@ const MainContainer = props => {
         <div
           key={i}
           style={{
-            clipPath: `polygon(0 ${(i-1)*100/divideBy}%, 0% ${(i * 100) / divideBy}%, 100% ${(i *
+            clipPath: `polygon(0 ${((i - 1) * 100) / divideBy}%, 0% ${(i *
               100) /
-              divideBy}%, 100% ${(i-1)*100/divideBy}%)`,
+              divideBy}%, 100% ${(i * 100) / divideBy}%, 100% ${((i - 1) *
+              100) /
+              divideBy}%)`,
             zIndex: `${5 + i}`,
+            transition: "left 2s ease-in",
+            left: "0%"
           }}
           className="clipped-element"
         >
@@ -64,30 +70,47 @@ const MainContainer = props => {
   };
 
   const runAnimation = () => {
-    const {clippedElements} = clipNslide
+    const { clippedElements } = clipNslide;
 
-    console.log("CLIPPED", clippedElements)
+    const newClippedElements = clippedElements.map(element => {
+      return (
+        <element.type
+          {...element.props}
+          key={element.key}
+          style={{
+            ...element.props.style,
+            left: '-100%',
+          }}
+        />
+      )
+    });
 
-    
-  }
+    setClipNslide({
+      ...clipNslide,
+      finishedClippig: false,
+      clippedElements:newClippedElements
+    });
+  };
+
+  useEffect(() => {
+    if (clipNslide.finishedClippig) {
+      runAnimation();
+    }
+  });
 
   const backgroundStyle = /(url\()|(\/)/g.test(props.background)
     ? { backgroundImage: props.background }
     : { backgroundColor: props.background };
 
-  console.log("CLIPEPD ELEMENTES", clipNslide.clippedElements);
-
-  if(clipNslide.animation){
-    runAnimation()
-  }
-
   return (
     <div
       id="ClipNSlide-Main-Container"
       style={backgroundStyle}
-      onClick={event => clipNslide.animation ? "" : handleChangeSlide(event)}
+      onClick={event => (clipNslide.animation ? "" : handleChangeSlide(event))}
     >
-      {clipNslide.animation ? clipNslide.clippedElements : props.children[clipNslide.displayChild]}
+      {clipNslide.animation
+        ? clipNslide.clippedElements
+        : props.children[clipNslide.displayChild]}
     </div>
   );
 };

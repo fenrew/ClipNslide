@@ -5,7 +5,7 @@ import Content from "../ClipNslide/Content/Content";
 
 const MainPage = () => {
   return (
-    <div>
+    <div style={{height: "100vh", width: "100%"}}>
       <MainContainer background="black">
         <Content>
           <div
