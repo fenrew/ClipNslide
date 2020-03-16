@@ -56,7 +56,8 @@ const MainContainer = props => {
               100) /
               divideBy}%)`,
             zIndex: `${5 + i}`,
-            transition: "left 2s ease-in",
+            transition: `left ${i%2==0 ? Math.random()*0.5+1.3 : Math.random()*0.3+1}s ease-in`,
+            transitionDelay: `${i === 1 ? 0 : Math.random()*0.7}s`,
             left: "0%"
           }}
           className="clipped-element"
