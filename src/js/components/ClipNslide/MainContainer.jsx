@@ -30,10 +30,9 @@ const MainContainer = props => {
           : clipNslide.displayChild - 1;
     }
 
-    const {
-      clippedElements,
-      clippedIncomingElements
-    } = clipAnimationElements();
+    const { clippedElements, clippedIncomingElements } = props.randomClipper
+      ? clipAnimationElementsRandom()
+      : clipAnimationElementsLined();
 
     setClipNslide({
       ...clipNslide,
@@ -49,15 +48,15 @@ const MainContainer = props => {
     });
   };
 
-  const clipAnimationElements = () => {
+  const clipAnimationElementsRandom = () => {
     // const windowHeight =
     //   window.innerHeight > 0 ? window.innerHeight : window.screen.height;
 
     const divideBy = props.divideBy ? props.divideBy : 3;
     const clippedElements = [],
       clippedIncomingElements = [];
+
     const oddOrEvenTransition = Math.floor(Math.random() * 2) + 1;
-    console.log("ODD OR EVEN", oddOrEvenTransition);
 
     for (let i = 1; i <= divideBy; i++) {
       const transitionTimer =
@@ -94,8 +93,57 @@ const MainContainer = props => {
           key={i}
           style={{
             ...stylesObj,
-            left: "300%",
+            left: "500%",
             transition: `left ${transitionTimer}s ease-out`
+          }}
+          className="clipped-element"
+        >
+          {props.children[nextChild]}
+        </div>
+      );
+    }
+
+    return { clippedElements, clippedIncomingElements };
+  };
+
+  const clipAnimationElementsLined = () => {
+    const divideBy = props.divideBy ? props.divideBy : 3;
+    const clippedElements = [],
+      clippedIncomingElements = [];
+
+    for (let i = 1; i <= divideBy; i++) {
+      const stylesObj = {
+        clipPath: `polygon(0 ${((i - 1) * 100) / divideBy}%, 0% ${(i * 100) /
+          divideBy}%, 100% ${(i * 100) / divideBy}%, 100% ${((i - 1) * 100) /
+          divideBy}%)`,
+        zIndex: `${5 + i}`
+      };
+
+      clippedElements.push(
+        <div
+          key={i}
+          style={{
+            ...stylesObj,
+            left: "0%",
+            transition: `left 1.5s ease-in`,
+            transitionDelay: `${i === 1 ? 0 : (i^1.1-1)*0.2}s`
+          }}
+          className="clipped-element"
+        >
+          {props.children[clipNslide.displayChild]}
+        </div>
+      );
+
+      let nextChild = (clipNslide.displayChild + 1) % props.children.length;
+
+      clippedIncomingElements.push(
+        <div
+          key={i}
+          style={{
+            ...stylesObj,
+            left: "500%",
+            transition: `left 1.5s ease-out`,
+            transitionDelay: `${i === 1 ? 0 : (i^1-1)*0.2}s`
           }}
           className="clipped-element"
         >
@@ -117,7 +165,7 @@ const MainContainer = props => {
           key={element.key}
           style={{
             ...element.props.style,
-            left: "-300%"
+            left: props.randomClipper ? "-500%" : "-500%"
           }}
         />
       );
