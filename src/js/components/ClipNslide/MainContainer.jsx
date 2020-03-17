@@ -17,9 +17,6 @@ const MainContainer = props => {
   const handleChangeSlide = event => {
     event.preventDefault();
 
-    const windowWidth =
-      window.innerWidth > 0 ? window.innerWidth : window.screen.width;
-
     let newDisplayChild = (clipNslide.displayChild + 1) % props.children.length;
 
     // 0.3 is 30% of the screen to go to previous child in the slider
@@ -49,9 +46,6 @@ const MainContainer = props => {
   };
 
   const clipAnimationElementsRandom = () => {
-    // const windowHeight =
-    //   window.innerHeight > 0 ? window.innerHeight : window.screen.height;
-
     const divideBy = props.divideBy ? props.divideBy : 3;
     const clippedElements = [],
       clippedIncomingElements = [];

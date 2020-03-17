@@ -45,3 +45,11 @@
   width: 60%;
   text-align: center;
 }
+
+.slider-list-container{
+  color: white;
+  font-size: 1.8vw;
+  align-self: center;
+  width: 50%;
+  margin-left: 10vw;
+}
