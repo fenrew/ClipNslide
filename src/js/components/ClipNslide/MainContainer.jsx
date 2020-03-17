@@ -7,7 +7,8 @@ const MainContainer = props => {
     clippedElements: [],
     clippedIncomingElements: [],
     finishedClippig: false,
-    ref: React.createRef()
+    ref: React.createRef(),
+    transitionTime: 1.5
   });
 
   const [showAnimation, setShowAnimation] = useState({
@@ -45,6 +46,7 @@ const MainContainer = props => {
     });
   };
 
+  // Update for transition time and thus the
   const clipAnimationElementsRandom = () => {
     const divideBy = props.divideBy ? props.divideBy : 3;
     const clippedElements = [],
@@ -107,9 +109,10 @@ const MainContainer = props => {
 
     for (let i = 1; i <= divideBy; i++) {
       const stylesObj = {
-        clipPath: `polygon(0 ${(((i - 1) * 100) / divideBy)}%, 0% ${((i * 100) /
-          divideBy)+0.2}%, 100% ${((i * 100) / divideBy)+0.2}%, 100% ${(((i - 1) * 100) /
-          divideBy)}%)`,
+        clipPath: `polygon(0 ${((i - 1) * 100) / divideBy}%, 0% ${(i * 100) /
+          divideBy +
+          0.2}%, 100% ${(i * 100) / divideBy + 0.2}%, 100% ${((i - 1) * 100) /
+          divideBy}%)`,
         zIndex: `${5 + i}`
       };
 
@@ -119,8 +122,8 @@ const MainContainer = props => {
           style={{
             ...stylesObj,
             left: "0%",
-            transition: `left 1.5s ease-in`,
-            transitionDelay: `${i === 1 ? 0 : (i^1.1-1)*0.2}s`
+            transition: `left ${clipNslide.transitionTime}s ease-in`,
+            transitionDelay: `${i === 1 ? 0 : (i ^ (1.1 - 1)) * 0.2}s`
           }}
           className="clipped-element"
         >
@@ -136,8 +139,8 @@ const MainContainer = props => {
           style={{
             ...stylesObj,
             left: "500%",
-            transition: `left 1.5s ease-out`,
-            transitionDelay: `${i === 1 ? 0 : (i^1-1)*0.2}s`
+            transition: `left ${clipNslide.transitionTime}s ease-out`,
+            transitionDelay: `${i === 1 ? 0 : (i ^ (1 - 1)) * 0.2}s`
           }}
           className="clipped-element"
         >
@@ -201,6 +204,36 @@ const MainContainer = props => {
     });
   };
 
+  // To add the "display current slide" on the top
+  const displayCurrentSlideCounter = () => {
+    // const slideDisplayer = [];
+    // for (let i = 0; i < props.children.length; i++) {
+    //   let newClassName =
+    //     clipNslide.displayChild === i
+    //       ? "active-slide-counter"
+    //       : "inactive-slide-counter";
+    //   newClassName += " each-slide-counter-icon";
+    //   slideDisplayer.push(<div className={newClassName}></div>);
+    // }
+    //return slideDisplayer;
+    return (
+      <div
+        className="slide-counter-background"
+        style={{
+          width: `${props.children.length * 2}vw`
+        }}
+      >
+        <div
+          className="slide-counter-active"
+          style={{
+            transition: `left ${clipNslide.transitionTime*2}s`,
+            left: `${(clipNslide.displayChild * 100) / props.children.length}%`
+          }}
+        ></div>
+      </div>
+    );
+  };
+
   useEffect(() => {
     if (clipNslide.finishedClippig) {
       runAnimation();
@@ -225,6 +258,9 @@ const MainContainer = props => {
         showAnimation.animation ? "" : handleChangeSlide(event)
       }
     >
+      <div id="current-slide-counter-container">
+        {displayCurrentSlideCounter()}
+      </div>
       {showAnimation.animation
         ? clipNslide.clippedElements
         : props.children[clipNslide.displayChild]}
