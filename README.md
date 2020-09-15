@@ -7,7 +7,7 @@ A slider created with react
 <br />
 <br />
 
-Responsive: <br/>Can be used in full screen or in a smaller element.<br /><br />
+Responsive: <br/>Can be used in full screen or in a smaller elements.<br /><br />
 
 Takes three props; background, divideBy and randomClipper:
   - Background: Sets the transition background as url and colors
